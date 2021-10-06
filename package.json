@@ -7,10 +7,12 @@
     "test": "tests"
   },
   "scripts": {
+    "lint": "npx eslint src/**",
     "test": "nyc mocha tests",
     "start": "node index.js"
   },
   "pre-push": [
+    "lint",
     "test"
   ],
   "keywords": [
