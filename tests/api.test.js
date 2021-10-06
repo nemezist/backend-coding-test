@@ -41,10 +41,35 @@ describe('API tests', () => {
         it('should return RIDES_NOT_FOUND_ERROR on empty data', (done) => {
             request(app)
                 .get('/rides')
+                .query({'page' : 0, 'perPage' : 5})
                 .expect('Content-Type', /application\/json/)
                 .expect(200)
                 .expect(res => {
                     assert.equal(res.body.error_code, 'RIDES_NOT_FOUND_ERROR', 'error codes invalid!')
+                })
+                .end(done);
+        });
+
+        it('should return VALIDATION_ERROR on empty query parameter: page', (done) => {
+            request(app)
+                .get('/rides')
+                .query({'perPage' : 5})
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'VALIDATION_ERROR', 'error codes invalid!')
+                })
+                .end(done);
+        });
+
+        it('should return VALIDATION_ERROR on empty query parameter: perPage', (done) => {
+            request(app)
+                .get('/rides')
+                .query({'page' : 0})
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'VALIDATION_ERROR', 'error codes invalid!')
                 })
                 .end(done);
         });
@@ -55,6 +80,7 @@ describe('API tests', () => {
 
             request(app)
                 .get('/rides')
+                .query({'page' : 0, 'perPage' : 5})
                 .expect('Content-Type', /application\/json/)
                 .expect(200)
                 .expect(res => {
@@ -66,7 +92,23 @@ describe('API tests', () => {
                 })
                 .end(done);
         });
+
+        it('should return RIDES_NOT_FOUND_ERROR on page exceeding the maximum number of page', (done) => {
+            db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)'
+                , [0.0, 0.0, 0.5, 0.5, 'riderName', 'driverName', 'driverVehicle']);
+
+            request(app)
+                .get('/rides')
+                .query({'page' : 1, 'perPage' : 5})
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'RIDES_NOT_FOUND_ERROR', "response length mismatch!");
+                })
+                .end(done);
+        });
     });
+
 
     describe('GET /rides/:id', ()=> {
         beforeEach(function() {
