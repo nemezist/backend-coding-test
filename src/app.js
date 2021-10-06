@@ -99,7 +99,24 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', (err, rows) => {
+    if (req.query.page == null || Number.isNaN(req.query.page) || req.query.page === '') {
+      return res.send({
+        error_code: 'VALIDATION_ERROR',
+        message: 'invalid parameter: page',
+      });
+    }
+
+    if (req.query.perPage == null || Number.isNaN(req.query.perPage) || req.query.perPage === '') {
+      return res.send({
+        error_code: 'VALIDATION_ERROR',
+        message: 'invalid parameter: perPage',
+      });
+    }
+
+    const page = Number(req.query.page);
+    const perPage = Number(req.query.perPage);
+
+    db.all('SELECT * FROM Rides LIMIT ? OFFSET ?', [perPage, perPage * page], (err, rows) => {
       if (err) {
         return res.send({
           error_code: 'SERVER_ERROR',
