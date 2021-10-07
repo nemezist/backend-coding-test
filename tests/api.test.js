@@ -143,6 +143,20 @@ describe('Rides API tests', () => {
                 .end(done);
         });
 
+        it('should return error on sql injection', (done) => {
+            db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)'
+                , [0.0, 0.0, 0.5, 0.5, 'riderName', 'driverName', 'driverVehicle']);
+
+            request(app)
+                .get(`/rides/1' OR '1'='1`)
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.notEqual(res.body.error_code, null);
+                })
+                .end(done);
+        });
+
     });
 
     describe('POST /rides', ()=>{

@@ -1,7 +1,7 @@
 module.exports = (db) => ({
   getRidesById: async (req, res) => {
     try {
-      const result = await db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`);
+      const result = await db.all('SELECT * FROM Rides WHERE rideID=?', req.params.id);
       if (result.length === 0) {
         return res.send({
           error_code: 'RIDES_NOT_FOUND_ERROR',
