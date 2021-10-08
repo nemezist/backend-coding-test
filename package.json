@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "npx eslint src/**",
     "test": "nyc mocha tests",
+    "test:load" : "artillery run tests/api.load.yaml",
     "start": "node index.js"
   },
   "pre-push": [
