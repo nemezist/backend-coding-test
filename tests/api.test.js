@@ -38,6 +38,19 @@ describe('Rides API tests', () => {
             db.run('DELETE FROM Rides');
         });
 
+        it('should return AUTHENTICATION_ERROR on invalid User-Agent', (done) => {
+            request(app)
+                .get('/rides')
+                .unset('User-Agent')
+                .query({'page' : 0, 'perPage' : 5})
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'AUTHENTICATION_ERROR', 'error codes invalid!')
+                })
+                .end(done);
+        });
+
         it('should return RIDES_NOT_FOUND_ERROR on empty data', (done) => {
             request(app)
                 .get('/rides')
@@ -115,6 +128,18 @@ describe('Rides API tests', () => {
             db.run(`DELETE FROM sqlite_sequence WHERE name='Rides'`);
         });
 
+        it('should return AUTHENTICATION_ERROR on invalid User-Agent', (done) => {
+            request(app)
+                .get('/rides/1')
+                .unset('User-Agent')
+                .expect('Content-Type', /application\/json/)
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'AUTHENTICATION_ERROR', 'error codes invalid!');
+                })
+                .end(done);
+        });
+
         it('should return RIDES_NOT_FOUND_ERROR on empty data', (done) => {
             request(app)
                 .get('/rides/1')
@@ -163,6 +188,26 @@ describe('Rides API tests', () => {
        beforeEach(()=> {
            db.run('DELETE FROM Rides');
        })
+
+        it('should return AUTHENTICATION_ERROR on invalid User-Agent', (done)=> {
+            request(app)
+                .post('/rides')
+                .unset('User-Agent')
+                .send({
+                    'start_lat': 0.0,
+                    'start_long': 0.0,
+                    'end_lat': 0.5,
+                    'end_long': 0.5,
+                    'rider_name': 'riderName',
+                    'driver_name': 'driverName',
+                    'driver_vehicle': 'driverVehicle'
+                })
+                .expect(200)
+                .expect(res => {
+                    assert.equal(res.body.error_code, 'AUTHENTICATION_ERROR', 'error codes invalid!');
+                })
+                .end(done);
+        });
 
         it('should return VALIDATION_ERROR on input mismatch for start_latitude', (done)=> {
            request(app)

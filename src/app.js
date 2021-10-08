@@ -13,6 +13,8 @@ const dbHelper = require('./db_helper');
 
 const ridesService = require('./service/rides');
 
+const userAgentMiddleware = require('./middleware/user-agent-checker.middleware');
+
 module.exports = (db) => {
   const s = dbHelper(db);
 
@@ -20,11 +22,11 @@ module.exports = (db) => {
 
   app.get('/health', (req, res) => res.send('Healthy'));
 
-  app.post('/rides', jsonParser, ridesService(s).insertRides);
+  app.post('/rides', userAgentMiddleware, jsonParser, ridesService(s).insertRides);
 
-  app.get('/rides', ridesService(s).getAllRides);
+  app.get('/rides', userAgentMiddleware, ridesService(s).getAllRides);
 
-  app.get('/rides/:id', ridesService(s).getRidesById);
+  app.get('/rides/:id', userAgentMiddleware, ridesService(s).getRidesById);
 
   return app;
 };
