@@ -15,11 +15,15 @@ scenarios:
   - name: "get all rides"
     flow:
       - get:
+          headers:
+            User-Agent: Artillery
           url: "/rides?page=0&perPage=10"
   - name: "insert rides"
     flow:
       - post:
           url: "/rides"
+          headers:
+            User-Agent: Artillery
           json:
             startLatitude: 0.0
             startLongitude: 0.0
@@ -31,4 +35,6 @@ scenarios:
   - name: "get specific rides"
     flow:
       - get:
+          headers:
+            User-Agent: Artillery
           url: "/rides/1"
