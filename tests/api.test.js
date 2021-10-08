@@ -10,7 +10,7 @@ const buildSchemas = require('../src/schemas');
 
 const assert = require('assert')
 
-describe('API tests', () => {
+describe('Rides API tests', () => {
     before((done) => {
         db.serialize((err) => {
             if (err) {
@@ -108,7 +108,6 @@ describe('API tests', () => {
                 .end(done);
         });
     });
-
 
     describe('GET /rides/:id', ()=> {
         beforeEach(function() {
@@ -302,6 +301,5 @@ describe('API tests', () => {
                 })
                 .end(done);
         });
-
     });
 });
