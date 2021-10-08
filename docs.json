@@ -1,0 +1,202 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Backend-coding-test swagger",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "localhost:8010",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/rides": {
+      "get": {
+        "operationId": "getAllRides",
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ride"
+              }
+            }
+          },
+          "error": {
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "insertRides",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "schema":{
+            "$ref": "#/definitions/insertRideRequest"
+          }
+        }],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ride"
+              }
+            }
+          },
+          "error": {
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/rides/{id}" : {
+      "get": {
+        "operationId": "getRidesById",
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ride"
+              }
+            }
+          },
+          "error": {
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "insertRideRequest": {
+      "required": [
+        "startLat",
+        "startLong",
+        "endLat",
+        "endLong",
+        "riderName",
+        "driverName",
+        "driverVehicle",
+        "created"
+      ],
+      "properties": {
+        "startLat": {
+          "type": "number",
+          "format": "float"
+        },
+        "startLong": {
+          "type": "number",
+          "format": "float"
+        },
+        "endLat": {
+          "type": "number",
+          "format": "float"
+        },
+        "endLong": {
+          "type": "number",
+          "format": "float"
+        },
+        "riderName": {
+          "type": "string"
+        },
+        "driverName": {
+          "type": "string"
+        },
+        "driverVehicle": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "ride": {
+      "required": [
+        "rideID",
+        "startLat",
+        "startLong",
+        "endLat",
+        "endLong",
+        "riderName",
+        "driverName",
+        "driverVehicle",
+        "created"
+      ],
+      "properties": {
+        "rideID": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "startLat": {
+          "type": "number",
+          "format": "float"
+        },
+        "startLong": {
+          "type": "number",
+          "format": "float"
+        },
+        "endLat": {
+          "type": "number",
+          "format": "float"
+        },
+        "endLong": {
+          "type": "number",
+          "format": "float"
+        },
+        "riderName": {
+          "type": "string"
+        },
+        "driverName": {
+          "type": "string"
+        },
+        "driverVehicle": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "error": {
+      "required": [
+        "error_code",
+        "message"
+      ],
+      "properties": {
+        "error_code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
