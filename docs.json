@@ -21,6 +21,20 @@
     "/rides": {
       "get": {
         "operationId": "getAllRides",
+        "parameters": [
+          {
+            "in": "query",
+            "required": true,
+            "name": "page",
+            "type": "number"
+          },
+          {
+            "in": "query",
+            "required": true,
+            "name": "perPage",
+            "type": "number"
+          }
+        ],
         "responses": {
           "200": {
             "schema": {
